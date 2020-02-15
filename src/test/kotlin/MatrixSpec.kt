@@ -63,4 +63,41 @@ class MatrixSpec : StringSpec({
 
         (matrix == matrix3) shouldBe false
     }
+
+
+    "Matrix multiplication" {
+        val matrix = Matrix(
+            A(1.0, 2.0, 3.0, 4.0),
+            A(5.0, 6.0, 7.0, 8.0),
+            A(9.0, 8.0, 7.0, 6.0),
+            A(5.0, 4.0, 3.0, 2.0)
+        )
+
+        val matrix2 = Matrix(
+            A(-2.0, 1.0, 2.0, 3.0),
+            A(3.0, 2.0, 1.0, -1.0),
+            A(4.0, 3.0, 6.0, 5.0),
+            A(1.0, 2.0, 7.0, 8.0)
+        )
+
+        matrix * matrix2 shouldBe Matrix(
+            A(20.0, 22.0, 50.0, 48.0),
+            A(44.0, 54.0, 114.0, 108.0),
+            A(40.0, 58.0, 110.0, 102.0),
+            A(16.0, 26.0, 46.0, 42.0)
+        )
+    }
+
+    "Matrix by tuple multiplication" {
+        val matrix = Matrix(
+            A(1.0, 2.0, 3.0, 4.0),
+            A(2.0, 4.0, 4.0, 2.0),
+            A(8.0, 6.0, 4.0, 1.0),
+            A(0.0, 0.0, 0.0, 1.0)
+        )
+
+        val tuple = Tuple(1.0, 2.0, 3.0, 1.0)
+
+        matrix * tuple shouldBe Tuple(18.0, 24.0, 33.0, 1.0)
+    }
 })
