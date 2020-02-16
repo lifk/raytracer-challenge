@@ -100,4 +100,37 @@ class MatrixSpec : StringSpec({
 
         matrix * tuple shouldBe Tuple(18.0, 24.0, 33.0, 1.0)
     }
+
+    "Matrix identity multiplication" {
+        val matrix = Matrix(
+            A(0.0, 1.0, 2.0, 4.0),
+            A(1.0, 2.0, 4.0, 8.0),
+            A(2.0, 4.0, 8.0, 16.0),
+            A(4.0, 8.0, 16.0, 32.0)
+        )
+
+        matrix * IDENTITY_MATRIX shouldBe matrix
+    }
+
+    "Transposing a matrix" {
+        val matrix = Matrix(
+            A(0.0, 9.0, 3.0, 0.0),
+            A(9.0, 8.0, 0.0, 8.0),
+            A(1.0, 8.0, 5.0, 3.0),
+            A(0.0, 0.0, 5.0, 8.0)
+        )
+
+        val matrix2 = Matrix(
+            A(0.0, 9.0, 1.0, 0.0),
+            A(9.0, 8.0, 8.0, 0.0),
+            A(3.0, 0.0, 5.0, 5.0),
+            A(0.0, 8.0, 3.0, 8.0)
+        )
+
+        matrix.transpose() shouldBe matrix2
+    }
+
+    "Transposing identity matrix" {
+        IDENTITY_MATRIX.transpose() shouldBe IDENTITY_MATRIX
+    }
 })

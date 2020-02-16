@@ -1,5 +1,12 @@
 import java.lang.Exception
 
+val IDENTITY_MATRIX = Matrix(
+    A(1.0, 0.0, 0.0, 0.0),
+    A(0.0, 1.0, 0.0, 0.0),
+    A(0.0, 0.0, 1.0, 0.0),
+    A(0.0, 0.0, 0.0, 1.0)
+)
+
 class Matrix(vararg data: Array<Double>) {
     private val data = arrayOf(*data)
     operator fun get(x: Int, y: Int) = data[x][y]
@@ -9,6 +16,18 @@ class Matrix(vararg data: Array<Double>) {
         } catch (e: Exception) {
             println("position not available on canvas")
         }
+    }
+
+    fun transpose(): Matrix {
+        val newMatrix = Matrix(*data.indices.map { DoubleArray(data.size).toTypedArray() }.toTypedArray())
+
+        data.indices.forEach { row ->
+            data[0].indices.forEach { column ->
+                newMatrix[row, column] = this[column, row]
+            }
+        }
+
+        return newMatrix
     }
 
     operator fun times(other: Matrix): Matrix {
