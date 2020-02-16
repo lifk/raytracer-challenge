@@ -87,4 +87,46 @@ class MatrixTransformationsSpec : StringSpec({
         halfQuarter * point shouldBe point(-(sqrt(2.0) / 2.0), sqrt(2.0) / 2.0, 0.0)
         fullQuarter * point shouldBe point(-1.0, 0.0, 0.0)
     }
+
+    "Shearing moves x in proportion to y" {
+        val point = point(2.0, 3.0, 4.0)
+        val transform = shearing(1.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+
+        transform * point shouldBe point(5.0, 3.0, 4.0)
+    }
+
+    "Shearing moves x in proportion to z" {
+        val point = point(2.0, 3.0, 4.0)
+        val transform = shearing(1.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+
+        transform * point shouldBe point(5.0, 3.0, 4.0)
+    }
+
+    "Shearing moves y in proportion to x" {
+        val point = point(2.0, 3.0, 4.0)
+        val transform = shearing(0.0, 0.0, 1.0, 0.0, 0.0, 0.0)
+
+        transform * point shouldBe point(2.0, 5.0, 4.0)
+    }
+
+    "Shearing moves y in proportion to z" {
+        val point = point(2.0, 3.0, 4.0)
+        val transform = shearing(0.0, 0.0, 0.0, 1.0, 0.0, 0.0)
+
+        transform * point shouldBe point(2.0, 7.0, 4.0)
+    }
+
+    "Shearing moves z in proportion to x" {
+        val point = point(2.0, 3.0, 4.0)
+        val transform = shearing(0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
+
+        transform * point shouldBe point(2.0, 3.0, 6.0)
+    }
+
+    "Shearing moves z in proportion to y" {
+        val point = point(2.0, 3.0, 4.0)
+        val transform = shearing(0.0, 0.0, 0.0, 0.0, 0.0, 1.0)
+
+        transform * point shouldBe point(2.0, 3.0, 7.0)
+    }
 })

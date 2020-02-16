@@ -194,3 +194,15 @@ fun rotationZ(radians: Double): Matrix {
 
     return newMatrix
 }
+
+fun shearing(xy: Double, xz: Double, yx: Double, yz: Double, zx: Double, zy: Double): Matrix {
+    val newMatrix = IDENTITY_MATRIX.copy()
+    newMatrix[0, 1] = xy
+    newMatrix[0, 2] = xz
+    newMatrix[1, 0] = yx
+    newMatrix[2, 0] = zx
+    newMatrix[1, 2] = yz
+    newMatrix[2, 1] = zy
+
+    return newMatrix
+}
