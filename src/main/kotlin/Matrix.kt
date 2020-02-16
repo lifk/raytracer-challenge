@@ -1,5 +1,5 @@
-import java.lang.Exception
-import kotlin.math.min
+import kotlin.math.cos
+import kotlin.math.sin
 
 val IDENTITY_MATRIX = Matrix(
     A(1.0, 0.0, 0.0, 0.0),
@@ -131,6 +131,10 @@ class Matrix(vararg data: Array<Double>) {
         return true
     }
 
+    fun copy(): Matrix {
+        return Matrix(*data.indices.map { data[it].copyOf() }.toTypedArray())
+    }
+
     override fun toString(): String {
         return "\n" + data.joinToString("\n") { it.joinToString(" | ") } + "\n"
     }
@@ -141,3 +145,52 @@ class Matrix(vararg data: Array<Double>) {
 }
 
 inline fun <reified T> A(vararg elements: T): Array<T> = arrayOf(*elements)
+
+fun translation(x: Double, y: Double, z: Double): Matrix {
+    val newMatrix = IDENTITY_MATRIX.copy()
+    newMatrix[0, 3] = x
+    newMatrix[1, 3] = y
+    newMatrix[2, 3] = z
+
+    return newMatrix
+}
+
+
+fun scaling(x: Double, y: Double, z: Double): Matrix {
+    val newMatrix = IDENTITY_MATRIX.copy()
+    newMatrix[0, 0] = x
+    newMatrix[1, 1] = y
+    newMatrix[2, 2] = z
+
+    return newMatrix
+}
+
+fun rotationX(radians: Double): Matrix {
+    val newMatrix = IDENTITY_MATRIX.copy()
+    newMatrix[1, 1] = cos(radians)
+    newMatrix[1, 2] = -sin(radians)
+    newMatrix[2, 1] = sin(radians)
+    newMatrix[2, 2] = cos(radians)
+
+    return newMatrix
+}
+
+fun rotationY(radians: Double): Matrix {
+    val newMatrix = IDENTITY_MATRIX.copy()
+    newMatrix[0, 0] = cos(radians)
+    newMatrix[0, 2] = sin(radians)
+    newMatrix[2, 0] = -sin(radians)
+    newMatrix[2, 2] = cos(radians)
+
+    return newMatrix
+}
+
+fun rotationZ(radians: Double): Matrix {
+    val newMatrix = IDENTITY_MATRIX.copy()
+    newMatrix[0, 0] = cos(radians)
+    newMatrix[0, 1] = -sin(radians)
+    newMatrix[1, 0] = sin(radians)
+    newMatrix[1, 1] = cos(radians)
+
+    return newMatrix
+}
