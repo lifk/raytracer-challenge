@@ -4,10 +4,9 @@ on: [push]
 
 jobs:
   test:
-
     runs-on: ubuntu-latest
-
     steps:
+    - name: pull branch
     - uses: actions/checkout@v2
     - name: Run tests
       run: ./gradlew test
