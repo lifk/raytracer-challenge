@@ -1,4 +1,5 @@
 import java.lang.Exception
+import kotlin.math.min
 
 val IDENTITY_MATRIX = Matrix(
     A(1.0, 0.0, 0.0, 0.0),
@@ -14,7 +15,7 @@ class Matrix(vararg data: Array<Double>) {
         try {
             data[x][y] = value
         } catch (e: Exception) {
-            println("position not available on canvas")
+            println("Cannot set value on Matrix, out of bounds exception")
         }
     }
 
@@ -28,6 +29,66 @@ class Matrix(vararg data: Array<Double>) {
         }
 
         return newMatrix
+    }
+
+    fun determinant(): Double {
+        return if (data.size == 2) {
+            this[0, 0] * this[1, 1] - this[0, 1] * this[1, 0]
+        } else {
+            var det = 0.0
+            data.indices.forEach { col ->
+                det += this[0, col] * cofactor(0, col)
+            }
+            det
+        }
+    }
+
+    fun subMatrix(row: Int, column: Int): Matrix {
+        val newMatrix =
+            Matrix(*(0 until data.size - 1).map { DoubleArray(data.size - 1).toTypedArray() }.toTypedArray())
+
+        (0 until data.size - 1).forEach { i ->
+            (0 until data[0].size - 1).forEach { j ->
+                val x = if (i >= row) i + 1 else i
+                val y = if (j >= column) j + 1 else j
+                newMatrix[i, j] = this[x, y]
+            }
+        }
+
+        return newMatrix
+    }
+
+    fun isInvertible(): Boolean {
+        return !determinant().equal(0.0)
+    }
+
+    fun inverse(): Matrix {
+        if (!isInvertible()) throw Exception("Matrix is not invertible")
+
+        val newMatrix = Matrix(*data.indices.map { DoubleArray(data.size).toTypedArray() }.toTypedArray())
+
+        data.indices.forEach { row ->
+            data[0].indices.forEach { column ->
+                val cofactor = cofactor(row, column)
+
+                newMatrix[column, row] = cofactor / determinant()
+            }
+        }
+
+
+        return newMatrix
+    }
+
+    fun minor(row: Int, column: Int): Double {
+        return subMatrix(row, column).determinant()
+    }
+
+    fun cofactor(row: Int, column: Int): Double {
+        return if ((row + column) % 2 == 0) {
+            minor(row, column)
+        } else {
+            -minor(row, column)
+        }
     }
 
     operator fun times(other: Matrix): Matrix {
@@ -71,7 +132,7 @@ class Matrix(vararg data: Array<Double>) {
     }
 
     override fun toString(): String {
-        return data.joinToString("\n") { it.joinToString(" | ") }
+        return "\n" + data.joinToString("\n") { it.joinToString(" | ") } + "\n"
     }
 
     override fun hashCode(): Int {
