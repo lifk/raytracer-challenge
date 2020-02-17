@@ -1,20 +1,43 @@
+package es.lifk.raytracer
+
 import kotlin.math.pow
 import kotlin.math.sqrt
 
 data class Tuple(val x: Double, val y: Double, val z: Double, val w: Double) {
-    operator fun plus(other: Tuple) = Tuple(x + other.x, y + other.y, z + other.z, w + other.w)
-    operator fun minus(other: Tuple) = Tuple(x - other.x, y - other.y, z - other.z, w - other.w)
+    operator fun plus(other: Tuple) =
+        Tuple(x + other.x, y + other.y, z + other.z, w + other.w)
+
+    operator fun minus(other: Tuple) =
+        Tuple(x - other.x, y - other.y, z - other.z, w - other.w)
+
     operator fun unaryMinus() = vector(0.0, 0.0, 0.0) - this
-    operator fun times(value: Double) = Tuple(x * value, y * value, z * value, w * value)
-    operator fun div(value: Double) = Tuple(x / value, y / value, z / value, w / value)
+    operator fun times(value: Double) =
+        Tuple(x * value, y * value, z * value, w * value)
+
+    operator fun div(value: Double) =
+        Tuple(x / value, y / value, z / value, w / value)
 
     fun magnitude(): Double = sqrt(x.pow(2) + y.pow(2) + z.pow(2) + w.pow(2))
-    fun normalize(): Tuple = Tuple(x / magnitude(), y / magnitude(), z / magnitude(), w / magnitude())
+    fun normalize(): Tuple =
+        Tuple(x / magnitude(), y / magnitude(), z / magnitude(), w / magnitude())
+
+
+    fun transform(
+        rotation: Matrix = IDENTITY_MATRIX,
+        scaling: Matrix = IDENTITY_MATRIX,
+        translation: Matrix = IDENTITY_MATRIX
+    ): Tuple {
+        return (translation * scaling * rotation) * this
+    }
 
     infix fun dot(other: Tuple): Double = (x * other.x) + (y * other.y) + (z * other.z) + (w * other.w)
 
     infix fun cross(other: Tuple): Tuple =
-        vector(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x)
+        vector(
+            y * other.z - z * other.y,
+            z * other.x - x * other.z,
+            x * other.y - y * other.x
+        )
 
     override operator fun equals(other: Any?): Boolean {
         if (other !is Tuple) return false

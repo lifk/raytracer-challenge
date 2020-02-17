@@ -1,3 +1,5 @@
+package es.lifk.raytracer
+
 data class Projectile(val pos: Tuple, val velocity: Tuple)
 data class Environment(val gravity: Tuple, val wind: Tuple)
 

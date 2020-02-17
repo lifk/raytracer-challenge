@@ -1,4 +1,4 @@
-import java.lang.Exception
+package es.lifk.raytracer
 
 data class Canvas(val width: Int, val height: Int) {
     private val data: Array<Array<Color>> = (0..width).map { column ->

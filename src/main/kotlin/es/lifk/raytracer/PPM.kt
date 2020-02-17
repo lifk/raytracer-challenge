@@ -1,3 +1,5 @@
+package es.lifk.raytracer
+
 fun canvasToPPM(canvas: Canvas) = """P3
 ${canvas.width} ${canvas.height}
 255

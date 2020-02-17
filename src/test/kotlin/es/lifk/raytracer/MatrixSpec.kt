@@ -1,8 +1,10 @@
+package es.lifk.raytracer
+
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
 class MatrixSpec : StringSpec({
-    "Matrix initialization" {
+    "es.lifk.raytracer.Matrix initialization" {
         val matrix = Matrix(
             A(1.0, 2.0, 3.0, 4.0),
             A(5.5, 6.5, 7.5, 8.5),
@@ -37,7 +39,7 @@ class MatrixSpec : StringSpec({
         matrix3[2, 2] shouldBe 1.0
     }
 
-    "Matrix equality" {
+    "es.lifk.raytracer.Matrix equality" {
         val matrix = Matrix(
             A(1.0, 2.0, 3.0, 4.0),
             A(5.5, 6.5, 7.5, 8.5),
@@ -65,7 +67,7 @@ class MatrixSpec : StringSpec({
     }
 
 
-    "Matrix multiplication" {
+    "es.lifk.raytracer.Matrix multiplication" {
         val matrix = Matrix(
             A(1.0, 2.0, 3.0, 4.0),
             A(5.0, 6.0, 7.0, 8.0),
@@ -88,7 +90,7 @@ class MatrixSpec : StringSpec({
         )
     }
 
-    "Matrix by tuple multiplication" {
+    "es.lifk.raytracer.Matrix by tuple multiplication" {
         val matrix = Matrix(
             A(1.0, 2.0, 3.0, 4.0),
             A(2.0, 4.0, 4.0, 2.0),
@@ -101,7 +103,7 @@ class MatrixSpec : StringSpec({
         matrix * tuple shouldBe Tuple(18.0, 24.0, 33.0, 1.0)
     }
 
-    "Matrix identity multiplication" {
+    "es.lifk.raytracer.Matrix identity multiplication" {
         val matrix = Matrix(
             A(0.0, 1.0, 2.0, 4.0),
             A(1.0, 2.0, 4.0, 8.0),

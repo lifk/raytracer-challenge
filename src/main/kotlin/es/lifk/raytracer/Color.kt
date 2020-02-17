@@ -1,10 +1,19 @@
+package es.lifk.raytracer
+
 import kotlin.math.roundToInt
 
 data class Color(val red: Double, val green: Double, val blue: Double) {
-    operator fun plus(other: Color) = Color(red + other.red, green + other.green, blue + other.blue)
-    operator fun minus(other: Color) = Color(red - other.red, green - other.green, blue - other.blue)
-    operator fun times(value: Double) = Color(red * value, green * value, blue * value)
-    operator fun times(value: Color) = Color(red * value.red, green * value.green, blue * value.blue)
+    operator fun plus(other: Color) =
+        Color(red + other.red, green + other.green, blue + other.blue)
+
+    operator fun minus(other: Color) =
+        Color(red - other.red, green - other.green, blue - other.blue)
+
+    operator fun times(value: Double) =
+        Color(red * value, green * value, blue * value)
+
+    operator fun times(value: Color) =
+        Color(red * value.red, green * value.green, blue * value.blue)
 
     fun getAs255(): Triple<Int, Int, Int> {
         val r = if (red * 255 > 255) 255 else (red * 255).roundToInt()

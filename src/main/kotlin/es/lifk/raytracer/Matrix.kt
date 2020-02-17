@@ -1,3 +1,5 @@
+package es.lifk.raytracer
+
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -15,12 +17,13 @@ class Matrix(vararg data: Array<Double>) {
         try {
             data[x][y] = value
         } catch (e: Exception) {
-            println("Cannot set value on Matrix, out of bounds exception")
+            println("Cannot set value on es.lifk.raytracer.Matrix, out of bounds exception")
         }
     }
 
     fun transpose(): Matrix {
-        val newMatrix = Matrix(*data.indices.map { DoubleArray(data.size).toTypedArray() }.toTypedArray())
+        val newMatrix =
+            Matrix(*data.indices.map { DoubleArray(data.size).toTypedArray() }.toTypedArray())
 
         data.indices.forEach { row ->
             data[0].indices.forEach { column ->
@@ -63,9 +66,10 @@ class Matrix(vararg data: Array<Double>) {
     }
 
     fun inverse(): Matrix {
-        if (!isInvertible()) throw Exception("Matrix is not invertible")
+        if (!isInvertible()) throw Exception("es.lifk.raytracer.Matrix is not invertible")
 
-        val newMatrix = Matrix(*data.indices.map { DoubleArray(data.size).toTypedArray() }.toTypedArray())
+        val newMatrix =
+            Matrix(*data.indices.map { DoubleArray(data.size).toTypedArray() }.toTypedArray())
 
         data.indices.forEach { row ->
             data[0].indices.forEach { column ->
@@ -92,7 +96,8 @@ class Matrix(vararg data: Array<Double>) {
     }
 
     operator fun times(other: Matrix): Matrix {
-        val newMatrix = Matrix(*data.indices.map { DoubleArray(data.size).toTypedArray() }.toTypedArray())
+        val newMatrix =
+            Matrix(*data.indices.map { DoubleArray(data.size).toTypedArray() }.toTypedArray())
 
         data.indices.forEach { row ->
             data[0].indices.forEach { column ->

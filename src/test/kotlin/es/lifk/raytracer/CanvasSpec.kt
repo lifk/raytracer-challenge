@@ -1,3 +1,5 @@
+package es.lifk.raytracer
+
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
