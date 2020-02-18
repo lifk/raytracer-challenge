@@ -28,8 +28,10 @@ class RaySpec : StringSpec({
 
         val xs = ray.intersect(sphere)
         xs.size shouldBe 2
-        xs[0] shouldBe 4.0
-        xs[1] shouldBe 6.0
+        xs[0].t shouldBe 4.0
+        xs[0].obj shouldBe sphere
+        xs[1].t shouldBe 6.0
+        xs[1].obj shouldBe sphere
     }
 
     "A ray intersects a sphere in one point" {
@@ -38,8 +40,8 @@ class RaySpec : StringSpec({
 
         val xs = ray.intersect(sphere)
         xs.size shouldBe 2
-        xs[0] shouldBe 5.0
-        xs[1] shouldBe 5.0
+        xs[0].t shouldBe 5.0
+        xs[1].t shouldBe 5.0
     }
 
 
@@ -57,8 +59,8 @@ class RaySpec : StringSpec({
 
         val xs = ray.intersect(sphere)
         xs.size shouldBe 2
-        xs[0] shouldBe -1.0
-        xs[1] shouldBe 1.0
+        xs[0].t shouldBe -1.0
+        xs[1].t shouldBe 1.0
     }
 
     "A sphere is behind the ray" {
@@ -67,8 +69,8 @@ class RaySpec : StringSpec({
 
         val xs = ray.intersect(sphere)
         xs.size shouldBe 2
-        xs[0] shouldBe -6.0
-        xs[1] shouldBe -4.0
+        xs[0].t shouldBe -6.0
+        xs[1].t shouldBe -4.0
     }
 })
 
