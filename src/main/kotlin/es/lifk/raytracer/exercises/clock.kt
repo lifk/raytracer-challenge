@@ -1,5 +1,10 @@
-package es.lifk.raytracer
+package es.lifk.raytracer.exercises
 
+import es.lifk.raytracer.Canvas
+import es.lifk.raytracer.Color
+import es.lifk.raytracer.canvasToPPM
+import es.lifk.raytracer.point
+import es.lifk.raytracer.rotationZ
 import java.io.File
 import kotlin.math.PI
 import kotlin.math.roundToInt
