@@ -35,8 +35,7 @@ fun main(){
     while (projectile.pos.y > 0) {
         ticks++
         projectile = tick(env, projectile)
-        canvas[projectile.pos.x.roundToInt(), 550 - projectile.pos.y.roundToInt()] =
-            Color(1.0, 0.0, 0.0)
+        canvas[projectile.pos.x.roundToInt(), 550 - projectile.pos.y.roundToInt()] = Color(1.0, 0.0, 0.0)
     }
 
     File("test.ppm").writeText(canvasToPPM(canvas))

@@ -22,8 +22,8 @@ fun renderClock() {
         )
 
         canvas[
-                (point.x * 50.0).roundToInt() + 250,
-                (point.y * 50.0).roundToInt() + 250
+            (point.x * 50.0).roundToInt() + 250,
+            (point.y * 50.0).roundToInt() + 250
         ] = Color(1.0, 0.0, 0.0)
 
         File("test2.ppm").writeText(canvasToPPM(canvas))
