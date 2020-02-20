@@ -9,15 +9,20 @@ ${(0 until canvas.height).flatMap { x ->
         "${color.first} ${color.second} ${color.third}"
     }
     if (line.length > 70) {
-        var acc = ""
-        var acc2 = ""
+        val mutableList = mutableListOf("")
+
+        var lines = 0
+
         line.split(" ").forEach {
-            if (acc.length + it.length < 70) {
-                acc += "$it "
-            } else acc2 += "$it "
+            if (mutableList[lines].length + it.length < 70) {
+                mutableList[lines] = mutableList[lines] + "$it "
+            } else {
+                lines++
+                mutableList.add("$it ")
+            }
         }
 
-        listOf(acc.trim(), acc2.trim())
+        mutableList.map { it.trim() }
     } else listOf(line)
 }.joinToString("\n")}
 """

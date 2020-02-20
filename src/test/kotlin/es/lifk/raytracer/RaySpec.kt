@@ -72,5 +72,39 @@ class RaySpec : StringSpec({
         xs[0].t shouldBe -6.0
         xs[1].t shouldBe -4.0
     }
+
+    "translating a ray" {
+        val ray = Ray(point(1.0, 2.0, 3.0), vector(0.0, 1.0, 0.0))
+        val newRay = ray.transform(translation(3.0, 4.0, 5.0))
+        newRay.origin shouldBe point(4.0, 6.0, 8.0)
+        newRay.direction shouldBe vector(0.0, 1.0, 0.0)
+    }
+
+    "Scaling a ray" {
+        val ray = Ray(point(1.0, 2.0, 3.0), vector(0.0, 1.0, 0.0))
+        val newRay = ray.transform(scaling(2.0, 3.0, 4.0))
+        newRay.origin shouldBe point(2.0, 6.0, 12.0)
+        newRay.direction shouldBe vector(0.0, 3.0, 0.0)
+    }
+
+    "Intersected a scaled sphere with a ray" {
+        val ray = Ray(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0))
+        val sphere = Sphere()
+        sphere.transform = scaling(2.0, 2.0, 2.0)
+
+        val intersections = ray.intersect(sphere)
+        intersections.size shouldBe 2
+        intersections[0].t shouldBe 3.0
+        intersections[1].t shouldBe 7.0
+    }
+
+    "Intersected a translated sphere with a ray" {
+        val ray = Ray(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0))
+        val sphere = Sphere()
+        sphere.transform = translation(5.0, 0.0, 0.0)
+
+        val intersections = ray.intersect(sphere)
+        intersections.size shouldBe 0
+    }
 })
 

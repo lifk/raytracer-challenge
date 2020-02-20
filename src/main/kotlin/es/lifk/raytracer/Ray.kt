@@ -8,9 +8,10 @@ data class Ray(val origin: Tuple, val direction: Tuple) {
     }
 
     fun intersect(other: Sphere): Array<Intersection> {
-        val sphereToRay = origin - point(0.0, 0.0, 0.0)
-        val a = direction dot direction
-        val b = 2 * (direction dot sphereToRay)
+        val ray = transform(other.transform.inverse())
+        val sphereToRay = ray.origin - point(0.0, 0.0, 0.0)
+        val a = ray.direction dot ray.direction
+        val b = 2 * (ray.direction dot sphereToRay)
         val c = (sphereToRay dot sphereToRay) - 1
 
         val discriminant = (b * b) - 4 * a * c
@@ -23,5 +24,9 @@ data class Ray(val origin: Tuple, val direction: Tuple) {
                 Intersection((-b + sqrt(discriminant)) / (2 * a), other)
             )
         }
+    }
+
+    fun transform(matrix: Matrix): Ray {
+        return Ray(matrix * origin, matrix * direction)
     }
 }
