@@ -30,6 +30,10 @@ data class Tuple(val x: Double, val y: Double, val z: Double, val w: Double) {
         return (translation * scaling * rotation) * this
     }
 
+    fun reflect(normal: Tuple): Tuple {
+        return this - normal * 2.0 * (this dot normal)
+    }
+
     infix fun dot(other: Tuple): Double = (x * other.x) + (y * other.y) + (z * other.z) + (w * other.w)
 
     infix fun cross(other: Tuple): Tuple =

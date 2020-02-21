@@ -162,4 +162,16 @@ class TupleSpec : StringSpec({
             0.4
         ) * 2.0 shouldBe Color(0.4, 0.6, 0.8)
     }
+
+    "Reflecting a vector approaching 45 degrees" {
+        val vector = vector(1.0, -1.0, 0.0)
+        val n = vector(0.0, 1.0, 0.0)
+        vector.reflect(n) shouldBe vector(1.0, 1.0, 0.0)
+    }
+
+    "Reflecting a vector on a slanted surface" {
+        val vector = vector(0.0, -1.0, 0.0)
+        val n = vector(sqrt(2.0) / 2.0, sqrt(2.0) / 2.0, 0.0)
+        vector.reflect(n) shouldBe vector(1.0, 0.0, 0.0)
+    }
 })
