@@ -39,5 +39,13 @@ class SphereSpec : StringSpec({
         n shouldBe vector(0.0, 0.97014, -0.24254)
     }
 
+    "A sphere has a default material" {
+        Sphere().material shouldBe Material()
+    }
 
+    "A sphere may be assigned a material" {
+        val material = Material(ambient = 1.0)
+        val sphere = Sphere(material = material)
+        sphere.material shouldBe material
+    }
 })

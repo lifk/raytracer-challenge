@@ -1,6 +1,6 @@
 package es.lifk.raytracer
 
-data class Intersection(val t: Double, val obj: Any)
+data class Intersection(val t: Double, val obj: Sphere)
 
 fun intersections(vararg intersection: Intersection): Array<Intersection> {
     return arrayOf(*intersection)
