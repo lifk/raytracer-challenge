@@ -51,4 +51,27 @@ class IntersectionSpec : StringSpec({
 
         intersections.hit() shouldBe i4
     }
+
+    "Precomputing the state of an intersection" {
+        val ray = Ray(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0))
+        val shape = Sphere()
+        val i = Intersection(4.0, shape)
+        val comps = i.prepareComputations(ray)
+        comps.t shouldBe i.t
+        comps.obj shouldBe i.obj
+        comps.point shouldBe point(0.0, 0.0, -1.0)
+        comps.eyeV shouldBe vector(0.0, 0.0, -1.0)
+        comps.normalV shouldBe vector(0.0, 0.0, -1.0)
+    }
+
+    "the hit when a intersection occurs on the inside" {
+        val ray = Ray(point(0.0, 0.0, 0.0), vector(0.0, 0.0, 1.0))
+        val shape = Sphere()
+        val i = Intersection(1.0, shape)
+        val comps = i.prepareComputations(ray)
+        comps.point shouldBe point(0.0, 0.0, 1.0)
+        comps.eyeV shouldBe vector(0.0, 0.0, -1.0)
+        comps.inside shouldBe true
+        comps.normalV shouldBe vector(0.0, 0.0, -1.0)
+    }
 })
