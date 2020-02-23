@@ -81,4 +81,50 @@ class WorldSpec : StringSpec({
         val ray = Ray(point(0.0, 0.0, 0.75), vector(0.0, 0.0, -1.0))
         w.colorAt(ray) shouldBe w.objects[1].material.color
     }
+
+    "There is no shadow when nothing is collinear with point and light" {
+        val w = defaultWorld()
+        val p = point(0.0, 10.0, 0.0)
+        w.isShadowed(p) shouldBe false
+    }
+
+
+    "There is shadow when an object is collinear with point and light" {
+        val w = defaultWorld()
+        val p = point(10.0, -10.0, 10.0)
+        w.isShadowed(p) shouldBe true
+    }
+
+
+    "There is no shadow when an object is behind the light" {
+        val w = defaultWorld()
+        val p = point(-20.0, 20.0, -20.0)
+        w.isShadowed(p) shouldBe false
+    }
+
+    "There is no shadow when an object is behind the point" {
+        val w = defaultWorld()
+        val p = point(-2.0, 20.0, -2.0)
+        w.isShadowed(p) shouldBe false
+    }
+
+    "ShadeHit is given an intersection in shadow" {
+        val w = World(PointLight(point(0.0, 0.0, -10.0), Color(1.0, 1.0, 1.0)))
+        w.objects.add(Sphere())
+        val sphere = Sphere(transform = translation(0.0, 0.0, 10.0))
+        w.objects.add(sphere)
+
+        val r = Ray(point(0.0, 0.0, 5.0), vector(0.0, 0.0, 1.0))
+        val i = Intersection(4.0, sphere)
+        val comps = i.prepareComputations(r)
+        w.shadeHit(comps) shouldBe Color(0.1, 0.1, 0.1)
+    }
+
+    "the hit should offset the point" {
+        val ray = Ray(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0))
+        val shape = Sphere(transform = translation(0.0, 0.0, 1.0))
+        val i = Intersection(5.0, shape)
+        val comps = i.prepareComputations(ray)
+        comps.overPoint.z < -EPSILON / 2
+    }
 })

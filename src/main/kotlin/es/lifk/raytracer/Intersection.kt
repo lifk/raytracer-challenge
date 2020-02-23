@@ -33,7 +33,9 @@ data class Computation(
     val eyeV: Tuple,
     val normalV: Tuple,
     val inside: Boolean = false
-)
+) {
+    val overPoint = point + normalV * EPSILON
+}
 
 fun intersections(vararg intersection: Intersection): Array<Intersection> {
     return arrayOf(*intersection)

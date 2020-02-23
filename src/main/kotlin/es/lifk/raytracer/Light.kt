@@ -2,7 +2,14 @@ package es.lifk.raytracer
 
 data class PointLight(val position: Tuple, val intensity: Color)
 
-fun lighting(material: Material, light: PointLight, point: Tuple, eyeVector: Tuple, normal: Tuple): Color {
+fun lighting(
+    material: Material,
+    light: PointLight,
+    point: Tuple,
+    eyeVector: Tuple,
+    normal: Tuple,
+    inShadow: Boolean = false
+): Color {
     val effectiveColor = material.color * light.intensity
     val lightV = (light.position - point).normalize()
     val ambient = material.color * material.ambient
@@ -24,6 +31,8 @@ fun lighting(material: Material, light: PointLight, point: Tuple, eyeVector: Tup
             light.intensity * material.specular * factor
         }
     }
+
+    if (inShadow) return ambient
 
     return ambient + diffuse + specular
 }

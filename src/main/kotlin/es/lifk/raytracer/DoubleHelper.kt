@@ -2,4 +2,6 @@ package es.lifk.raytracer
 
 import kotlin.math.abs
 
-fun Double.equal(other: Double) = abs(this - other) < 0.00001
+const val EPSILON = 0.00001
+
+fun Double.equal(other: Double) = abs(this - other) < EPSILON

@@ -8,7 +8,14 @@ data class World(var light: PointLight? = null) {
     }
 
     fun shadeHit(comps: Computation): Color {
-        return lighting(comps.obj.material, light!!, comps.point, comps.eyeV, comps.normalV)
+        return lighting(
+            material = comps.obj.material,
+            light = light!!,
+            point = comps.point,
+            eyeVector = comps.eyeV,
+            normal = comps.normalV,
+            inShadow = isShadowed(comps.overPoint)
+        )
     }
 
     fun colorAt(ray: Ray): Color {
@@ -19,6 +26,17 @@ data class World(var light: PointLight? = null) {
         } else {
             Color(0.0, 0.0, 0.0)
         }
+    }
+
+    fun isShadowed(point: Tuple): Boolean {
+        val v = light!!.position - point
+        val distance = v.magnitude()
+        val direction = v.normalize()
+
+        val shadowRay = Ray(point, direction)
+        val hit = intersect(shadowRay).hit()
+
+        return hit != null && hit.t < distance
     }
 }
 

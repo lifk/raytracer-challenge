@@ -63,4 +63,15 @@ class LightsSpec : StringSpec({
 
         result shouldBe Color(0.1, 0.1, 0.1)
     }
+
+    "lighting with a surface in shadow" {
+        val eyeV = vector(0.0, 0.0, -1.0)
+        val normal = vector(0.0, 0.0, -1.0)
+        val light = PointLight(point(0.0, 0.0, -10.0), Color(1.0, 1.0, 1.0))
+        val inShadow = true
+
+        val result = lighting(material, light, position, eyeV, normal, inShadow)
+
+        result shouldBe Color(0.1, 0.1, 0.1)
+    }
 })
