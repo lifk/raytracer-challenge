@@ -1,7 +1,7 @@
 package es.lifk.raytracer
 
 data class World(var light: PointLight? = null) {
-    val objects: MutableList<Sphere> = mutableListOf()
+    val objects: MutableList<Shape> = mutableListOf()
 
     fun intersect(ray: Ray): Array<Intersection> {
         return objects.flatMap { ray.intersect(it).toList() }.sortedBy { it.t }.toTypedArray()

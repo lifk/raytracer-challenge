@@ -1,6 +1,6 @@
 package es.lifk.raytracer
 
-data class Intersection(val t: Double, val obj: Sphere) {
+data class Intersection(val t: Double, val obj: Shape) {
     fun prepareComputations(ray: Ray): Computation {
         val point = ray.position(t)
         val normal = obj.normalAt(point)
@@ -28,7 +28,7 @@ data class Intersection(val t: Double, val obj: Sphere) {
 
 data class Computation(
     val t: Double,
-    val obj: Sphere,
+    val obj: Shape,
     val point: Tuple,
     val eyeV: Tuple,
     val normalV: Tuple,

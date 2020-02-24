@@ -5,19 +5,9 @@ import java.io.File
 import kotlin.math.PI
 
 fun main() {
-    val floor = Sphere(
-        scaling(10.0, 0.01, 10.0),
+    val floor = Plane(
+        translation(0.0, 0.0, 20.0),
         Material(Color(1.0, 0.9, 0.9), specular = 0.0)
-    )
-
-    val leftWall = Sphere(
-        translation(0.0, 0.0, 5.0) * rotationY(-PI / 4) * rotationX(PI / 2) * scaling(10.0, 0.01, 10.0),
-        floor.material
-    )
-
-    val rightWall = Sphere(
-        translation(0.0, 0.0, 5.0) * rotationY(PI / 4) * rotationX(PI / 2) * scaling(10.0, 0.01, 10.0),
-        floor.material
     )
 
     val middleSphere = Sphere(
@@ -38,8 +28,6 @@ fun main() {
     val world = World(PointLight(point(-10.0, 10.0, -10.0), Color(1.0, 1.0, 1.0)))
 
     world.objects.add(floor)
-    world.objects.add(leftWall)
-    world.objects.add(rightWall)
     world.objects.add(middleSphere)
     world.objects.add(rightSphere)
     world.objects.add(leftSphere)
