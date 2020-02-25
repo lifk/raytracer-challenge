@@ -3,6 +3,11 @@ package es.lifk.raytracer
 import kotlin.math.roundToInt
 
 data class Color(val red: Double, val green: Double, val blue: Double) {
+    companion object {
+        val WHITE = Color(1.0, 1.0, 1.0)
+        val BLACK = Color(0.0, 0.0, 0.0)
+    }
+
     operator fun plus(other: Color) =
         Color(red + other.red, green + other.green, blue + other.blue)
 

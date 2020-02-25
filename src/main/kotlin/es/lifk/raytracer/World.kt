@@ -10,6 +10,7 @@ data class World(var light: PointLight? = null) {
     fun shadeHit(comps: Computation): Color {
         return lighting(
             material = comps.obj.material,
+            obj = comps.obj,
             light = light!!,
             point = comps.point,
             eyeVector = comps.eyeV,

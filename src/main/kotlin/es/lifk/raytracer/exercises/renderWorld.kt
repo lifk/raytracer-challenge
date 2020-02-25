@@ -12,7 +12,12 @@ fun main() {
 
     val middleSphere = Sphere(
         transform = translation(-0.5, 1.0, -0.5),
-        material = Material(Color(0.1, 1.0, 0.5), diffuse = 0.7, specular = 0.3)
+        material = Material(
+            Color(0.1, 1.0, 0.5),
+            diffuse = 0.7,
+            specular = 0.3,
+            pattern = StripePattern(Color(0.2, 0.5, 0.6), Color.WHITE, scaling(0.2, 0.2, 0.2))
+        )
     )
 
     val rightSphere = Sphere(
@@ -33,8 +38,8 @@ fun main() {
     world.objects.add(leftSphere)
 
     val camera = Camera(
-        500,
-        250,
+        150,
+        75,
         PI / 2,
         transform = viewTransform(point(0.0, 1.5, -5.0), point(0.0, 1.0, 0.0), vector(0.0, 1.0, 0.0))
     )

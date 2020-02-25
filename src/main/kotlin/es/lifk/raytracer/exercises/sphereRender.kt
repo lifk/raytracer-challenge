@@ -33,7 +33,7 @@ fun main() {
                 val normal = hit.obj.normalAt(point)
                 val eye = -ray.direction
 
-                canvas[x, y] = lighting(hit.obj.material, light, point, eye, normal)
+                canvas[x, y] = lighting(hit.obj.material, Sphere(), light, point, eye, normal)
             }
         }
     }

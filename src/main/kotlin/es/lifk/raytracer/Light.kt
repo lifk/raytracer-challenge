@@ -4,15 +4,17 @@ data class PointLight(val position: Tuple, val intensity: Color)
 
 fun lighting(
     material: Material,
+    obj: Shape,
     light: PointLight,
     point: Tuple,
     eyeVector: Tuple,
     normal: Tuple,
     inShadow: Boolean = false
 ): Color {
-    val effectiveColor = material.color * light.intensity
+    val color = if (material.pattern != null) material.pattern.stripeAtObject(obj, point) else material.color
+    val effectiveColor = color * light.intensity
     val lightV = (light.position - point).normalize()
-    val ambient = material.color * material.ambient
+    val ambient = color * material.ambient
 
     val lightDotNormal = lightV dot normal
 

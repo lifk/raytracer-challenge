@@ -19,7 +19,7 @@ class LightsSpec : StringSpec({
         val normal = vector(0.0, 0.0, -1.0)
         val light = PointLight(point(0.0, 0.0, -10.0), Color(1.0, 1.0, 1.0))
 
-        val result = lighting(material, light, position, eyeV, normal)
+        val result = lighting(material, Sphere(), light, position, eyeV, normal)
 
         result shouldBe Color(1.9, 1.9, 1.9)
     }
@@ -29,7 +29,7 @@ class LightsSpec : StringSpec({
         val normal = vector(0.0, 0.0, -1.0)
         val light = PointLight(point(0.0, 0.0, -10.0), Color(1.0, 1.0, 1.0))
 
-        val result = lighting(material, light, position, eyeV, normal)
+        val result = lighting(material, Sphere(), light, position, eyeV, normal)
 
         result shouldBe Color(1.0, 1.0, 1.0)
     }
@@ -39,7 +39,7 @@ class LightsSpec : StringSpec({
         val normal = vector(0.0, 0.0, -1.0)
         val light = PointLight(point(0.0, 10.0, -10.0), Color(1.0, 1.0, 1.0))
 
-        val result = lighting(material, light, position, eyeV, normal)
+        val result = lighting(material, Sphere(), light, position, eyeV, normal)
 
         result shouldBe Color(0.7364, 0.7364, 0.7364)
     }
@@ -49,7 +49,7 @@ class LightsSpec : StringSpec({
         val normal = vector(0.0, 0.0, -1.0)
         val light = PointLight(point(0.0, 10.0, -10.0), Color(1.0, 1.0, 1.0))
 
-        val result = lighting(material, light, position, eyeV, normal)
+        val result = lighting(material, Sphere(), light, position, eyeV, normal)
 
         result shouldBe Color(1.6364, 1.6364, 1.6364)
     }
@@ -59,7 +59,7 @@ class LightsSpec : StringSpec({
         val normal = vector(0.0, 0.0, -1.0)
         val light = PointLight(point(0.0, 0.0, 10.0), Color(1.0, 1.0, 1.0))
 
-        val result = lighting(material, light, position, eyeV, normal)
+        val result = lighting(material, Sphere(), light, position, eyeV, normal)
 
         result shouldBe Color(0.1, 0.1, 0.1)
     }
@@ -70,7 +70,7 @@ class LightsSpec : StringSpec({
         val light = PointLight(point(0.0, 0.0, -10.0), Color(1.0, 1.0, 1.0))
         val inShadow = true
 
-        val result = lighting(material, light, position, eyeV, normal, inShadow)
+        val result = lighting(material, Sphere(), light, position, eyeV, normal, inShadow)
 
         result shouldBe Color(0.1, 0.1, 0.1)
     }
