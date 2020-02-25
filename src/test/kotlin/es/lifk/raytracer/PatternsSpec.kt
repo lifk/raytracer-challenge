@@ -104,4 +104,41 @@ class PatternsSpec : StringSpec({
 
         obj.material.pattern!!.patternAtShape(obj, point(2.5, 3.0, 3.5)) shouldBe Color(0.75, 0.5, 0.25)
     }
+
+    "a gradient pattern linearly interpolates between colors" {
+        val pattern = GradientPattern(Color.WHITE, Color.BLACK)
+        pattern.patternAt(point(0.0, 0.0, 0.0)) shouldBe Color.WHITE
+        pattern.patternAt(point(0.25, 0.0, 0.0)) shouldBe Color(0.75, 0.75, 0.75)
+        pattern.patternAt(point(0.50, 0.0, 0.0)) shouldBe Color(0.5, 0.5, 0.5)
+        pattern.patternAt(point(0.75, 0.0, 0.0)) shouldBe Color(0.25, 0.25, 0.25)
+    }
+
+    "a ring pattern should extend in both x and z" {
+        val pattern = RingPattern(Color.WHITE, Color.BLACK)
+        pattern.patternAt(point(0.0, 0.0, 0.0)) shouldBe Color.WHITE
+        pattern.patternAt(point(1.0, 0.0, 0.0)) shouldBe Color.BLACK
+        pattern.patternAt(point(0.0, 0.0, 1.0)) shouldBe Color.BLACK
+        pattern.patternAt(point(0.708, 0.0, 0.708)) shouldBe Color.BLACK
+    }
+
+    "Checkers pattern should repeat in x" {
+        val pattern = CheckersPattern(Color.WHITE, Color.BLACK)
+        pattern.patternAt(point(0.0, 0.0, 0.0)) shouldBe Color.WHITE
+        pattern.patternAt(point(0.99, 0.0, 0.0)) shouldBe Color.WHITE
+        pattern.patternAt(point(1.01, 0.0, 0.0)) shouldBe Color.BLACK
+    }
+
+    "Checkers pattern should repeat in y" {
+        val pattern = CheckersPattern(Color.WHITE, Color.BLACK)
+        pattern.patternAt(point(0.0, 0.0, 0.0)) shouldBe Color.WHITE
+        pattern.patternAt(point(0.0, 0.99, 0.0)) shouldBe Color.WHITE
+        pattern.patternAt(point(0.0, 1.01, 0.0)) shouldBe Color.BLACK
+    }
+
+    "Checkers pattern should repeat in z" {
+        val pattern = CheckersPattern(Color.WHITE, Color.BLACK)
+        pattern.patternAt(point(0.0, 0.0, 0.0)) shouldBe Color.WHITE
+        pattern.patternAt(point(0.0, 0.0, 0.99)) shouldBe Color.WHITE
+        pattern.patternAt(point(0.0, 0.0, 1.01)) shouldBe Color.BLACK
+    }
 })
