@@ -1,4 +1,6 @@
-package es.lifk.raytracer
+package es.lifk.raytracer.entities
+
+import es.lifk.raytracer.*
 
 data class TestShape(override var transform: Matrix = IDENTITY_MATRIX, override val material: Material = Material()) :
     Shape {

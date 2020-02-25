@@ -1,5 +1,6 @@
 package es.lifk.raytracer
 
+import es.lifk.raytracer.entities.TestShape
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 import kotlin.math.PI
@@ -41,7 +42,13 @@ class ShapeSpec : StringSpec({
     }
 
     "Computing the normal on a transformed shape" {
-        val testShape = TestShape(transform = scaling(1.0, 0.5, 1.0) * rotationZ(PI / 5))
+        val testShape = TestShape(
+            transform = scaling(
+                1.0,
+                0.5,
+                1.0
+            ) * rotationZ(PI / 5)
+        )
 
         testShape.normalAt(point(0.0, sqrt(2.0) / 2, -sqrt(2.0) / 2)) shouldBe vector(0.0, 0.97014, -0.24254)
     }

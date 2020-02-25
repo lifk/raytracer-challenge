@@ -11,7 +11,7 @@ fun lighting(
     normal: Tuple,
     inShadow: Boolean = false
 ): Color {
-    val color = if (material.pattern != null) material.pattern.stripeAtObject(obj, point) else material.color
+    val color = if (material.pattern != null) material.pattern.patternAtShape(obj, point) else material.color
     val effectiveColor = color * light.intensity
     val lightV = (light.position - point).normalize()
     val ambient = color * material.ambient
