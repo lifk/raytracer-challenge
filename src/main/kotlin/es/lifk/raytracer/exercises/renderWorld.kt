@@ -21,12 +21,12 @@ fun main() {
     )
 
     val rightSphere = Sphere(
-        transform = translation(1.5, 0.5, -0.5) * scaling(0.5, 0.5, 0.5),
+        transform = translation(1.5, 1.5, -0.5) * scaling(1.5, 1.5, 1.5),
         material = Material(
             Color(0.5, 1.0, 0.1),
             diffuse = 0.7,
             specular = 0.3,
-            pattern = GradientPattern(Color(1.0, 0.0, 0.0), Color(0.0, 1.0, 0.0))
+            pattern = RadialGradientPattern(Color(1.0, 0.0, 0.0), Color(0.0, 1.0, 0.0), scaling(0.3, 0.3, 0.3))
         )
     )
 
@@ -48,8 +48,8 @@ fun main() {
     world.objects.add(leftSphere)
 
     val camera = Camera(
-        500,
-        250,
+        200,
+        100,
         PI / 2,
         transform = viewTransform(point(0.0, 1.5, -5.0), point(0.0, 1.0, 0.0), vector(0.0, 1.0, 0.0))
     )

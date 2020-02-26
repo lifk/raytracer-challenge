@@ -61,3 +61,34 @@ data class CheckersPattern(
         return b
     }
 }
+
+data class RadialGradientPattern(
+    val a: Color,
+    val b: Color,
+    override val transform: Matrix = IDENTITY_MATRIX
+) : Pattern {
+    private val ring = RingPattern(a, b, transform)
+    override fun patternAt(point: Tuple): Color {
+        if (ring.patternAt(point) == a) {
+            val distance = b - a
+            val fraction = point.y - floor(point.y)
+
+            return a + distance * fraction
+        } else {
+            val distance = a - b
+            val fraction = point.y - floor(point.y)
+
+            return b + distance * fraction
+        }
+    }
+}
+
+data class BlendedPattern(
+    val a: Pattern,
+    val b: Pattern,
+    override val transform: Matrix = IDENTITY_MATRIX
+) : Pattern {
+    override fun patternAt(point: Tuple): Color {
+        return (a.patternAt(point) + b.patternAt(point)) * 0.5
+    }
+}
