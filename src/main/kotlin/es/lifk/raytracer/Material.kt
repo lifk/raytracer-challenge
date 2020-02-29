@@ -6,5 +6,6 @@ data class Material(
     var diffuse: Double = 0.9,
     var specular: Double = 0.9,
     var shininess: Double = 200.0,
-    val pattern: Pattern? = null
+    val pattern: Pattern? = null,
+    val reflective: Double = 0.0
 )

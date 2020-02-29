@@ -12,6 +12,7 @@ data class Intersection(val t: Double, val obj: Shape) {
                 point = point,
                 eyeV = -ray.direction,
                 normalV = -normal,
+                reflectV = ray.direction.reflect(-normal),
                 inside = true
             )
         } else {
@@ -20,7 +21,8 @@ data class Intersection(val t: Double, val obj: Shape) {
                 obj = obj,
                 point = point,
                 eyeV = -ray.direction,
-                normalV = normal
+                normalV = normal,
+                reflectV = ray.direction.reflect(normal)
             )
         }
     }
@@ -32,6 +34,7 @@ data class Computation(
     val point: Tuple,
     val eyeV: Tuple,
     val normalV: Tuple,
+    val reflectV: Tuple,
     val inside: Boolean = false
 ) {
     val overPoint = point + normalV * EPSILON

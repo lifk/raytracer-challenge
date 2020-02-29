@@ -2,6 +2,7 @@ package es.lifk.raytracer
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
+import kotlin.math.sqrt
 
 class IntersectionSpec : StringSpec({
     "Initializing a intersection" {
@@ -73,5 +74,12 @@ class IntersectionSpec : StringSpec({
         comps.eyeV shouldBe vector(0.0, 0.0, -1.0)
         comps.inside shouldBe true
         comps.normalV shouldBe vector(0.0, 0.0, -1.0)
+    }
+
+    "precomputing the reflection vector" {
+        val shape = Plane()
+        val ray = Ray(point(0.0, 1.0, -1.0), vector(0.0, -sqrt(2.0) / 2.0, sqrt(2.0) / 2.0))
+        val intersection = Intersection(sqrt(2.0), shape)
+        intersection.prepareComputations(ray).reflectV shouldBe vector(0.0, sqrt(2.0) / 2.0, sqrt(2.0) / 2.0)
     }
 })

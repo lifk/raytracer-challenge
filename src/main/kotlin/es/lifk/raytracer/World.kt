@@ -7,7 +7,7 @@ data class World(var light: PointLight? = null) {
         return objects.flatMap { ray.intersect(it).toList() }.sortedBy { it.t }.toTypedArray()
     }
 
-    fun shadeHit(comps: Computation): Color {
+    fun shadeHit(comps: Computation, remaining: Int = 4): Color {
         return lighting(
             material = comps.obj.material,
             obj = comps.obj,
@@ -16,17 +16,26 @@ data class World(var light: PointLight? = null) {
             eyeVector = comps.eyeV,
             normal = comps.normalV,
             inShadow = isShadowed(comps.overPoint)
-        )
+        ) + reflectedColor(comps, remaining)
     }
 
-    fun colorAt(ray: Ray): Color {
+    fun colorAt(ray: Ray, remaining: Int = 4): Color {
         val hit = intersect(ray).hit()
 
         return if (hit != null) {
-            shadeHit(hit.prepareComputations(ray))
+            shadeHit(hit.prepareComputations(ray), remaining)
         } else {
             Color(0.0, 0.0, 0.0)
         }
+    }
+
+    fun reflectedColor(comps: Computation, remaining: Int = 4): Color {
+        if (comps.obj.material.reflective.equal(0.0) || remaining <= 0) return Color.BLACK
+
+        val reflectRay = Ray(comps.overPoint, comps.reflectV)
+        val color = colorAt(reflectRay, remaining - 1)
+
+        return color * comps.obj.material.reflective
     }
 
     fun isShadowed(point: Tuple): Boolean {

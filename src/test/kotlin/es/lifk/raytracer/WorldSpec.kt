@@ -1,8 +1,10 @@
 package es.lifk.raytracer
 
 import io.kotlintest.matchers.collections.shouldContainAll
+import io.kotlintest.matchers.types.shouldBeTypeOf
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
+import kotlin.math.sqrt
 
 class WorldSpec : StringSpec({
     "Creating a empty world" {
@@ -126,5 +128,60 @@ class WorldSpec : StringSpec({
         val i = Intersection(5.0, shape)
         val comps = i.prepareComputations(ray)
         comps.overPoint.z < -EPSILON / 2
+    }
+
+    "The reflected color for a non reflective material" {
+        val world = defaultWorld()
+        val r = Ray(point(0.0, 0.0, 0.0), vector(0.0, 0.0, 1.0))
+        val shape = world.objects[1]
+        shape.material.ambient = 1.0
+        val i = Intersection(1.0, shape)
+        val comps = i.prepareComputations(r)
+        world.reflectedColor(comps) shouldBe Color.BLACK
+    }
+
+    "The color for a reflective material" {
+        val world = defaultWorld()
+        val shape = Plane(material = Material(reflective = 0.5), transform = translation(0.0, -1.0, 0.0))
+        world.objects.add(shape)
+
+        val r = Ray(point(0.0, 0.0, -3.0), vector(0.0, -sqrt(2.0) / 2.0, sqrt(2.0) / 2.0))
+        val i = Intersection(sqrt(2.0), shape)
+        val comps = i.prepareComputations(r)
+        world.reflectedColor(comps) shouldBe Color(0.19033, 0.23791, 0.14274)
+    }
+
+    "Shade hit with a reflective material" {
+        val world = defaultWorld()
+        val shape = Plane(material = Material(reflective = 0.5), transform = translation(0.0, -1.0, 0.0))
+        world.objects.add(shape)
+
+        val r = Ray(point(0.0, 0.0, -3.0), vector(0.0, -sqrt(2.0) / 2.0, sqrt(2.0) / 2.0))
+        val i = Intersection(sqrt(2.0), shape)
+        val comps = i.prepareComputations(r)
+        world.shadeHit(comps) shouldBe Color(0.87675, 0.92434, 0.82917)
+    }
+
+    "Color at with mutually reflective surfaces" {
+        val w = World(light = PointLight(point(0.0, 0.0, 0.0), Color.WHITE))
+        val lowerPlane = Plane(material = Material(reflective = 1.0), transform = translation(0.0, -1.0, 0.0))
+        val upperPlane = Plane(material = Material(reflective = 1.0), transform = translation(0.0, 1.0, 0.0))
+
+        w.objects.add(lowerPlane)
+        w.objects.add(upperPlane)
+
+        val r = Ray(point(0.0, 0.0, 0.0), vector(0.0, 1.0, 0.0))
+        w.colorAt(r).shouldBeTypeOf<Color>()
+    }
+
+    "The reflected color at the maximum recursive depth" {
+        val world = defaultWorld()
+        val shape = Plane(material = Material(reflective = 0.5), transform = translation(0.0, -1.0, 0.0))
+        world.objects.add(shape)
+
+        val r = Ray(point(0.0, 0.0, -3.0), vector(0.0, -sqrt(2.0) / 2.0, sqrt(2.0) / 2.0))
+        val i = Intersection(sqrt(2.0), shape)
+        val comps = i.prepareComputations(r)
+        world.reflectedColor(comps, 0) shouldBe Color.BLACK
     }
 })

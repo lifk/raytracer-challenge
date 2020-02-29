@@ -7,7 +7,7 @@ import kotlin.math.PI
 fun main() {
     val floor = Plane(
         translation(0.0, 0.0, 20.0),
-        Material(Color(1.0, 0.9, 0.9), specular = 0.0)
+        Material(Color(1.0, 0.9, 0.9), specular = 0.0, reflective = 0.9)
     )
 
     val middleSphere = Sphere(
