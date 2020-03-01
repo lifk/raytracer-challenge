@@ -1,5 +1,7 @@
 package es.lifk.raytracer
 
+import kotlin.math.sqrt
+
 data class World(var light: PointLight? = null) {
     val objects: MutableList<Shape> = mutableListOf()
 
@@ -16,14 +18,15 @@ data class World(var light: PointLight? = null) {
             eyeVector = comps.eyeV,
             normal = comps.normalV,
             inShadow = isShadowed(comps.overPoint)
-        ) + reflectedColor(comps, remaining)
+        ) + reflectedColor(comps, remaining) + refractedColor(comps, remaining)
     }
 
     fun colorAt(ray: Ray, remaining: Int = 4): Color {
-        val hit = intersect(ray).hit()
+        val intersections = intersect(ray)
+        val hit = intersections.hit()
 
         return if (hit != null) {
-            shadeHit(hit.prepareComputations(ray), remaining)
+            shadeHit(hit.prepareComputations(ray, intersections.toList()), remaining)
         } else {
             Color(0.0, 0.0, 0.0)
         }
@@ -36,6 +39,23 @@ data class World(var light: PointLight? = null) {
         val color = colorAt(reflectRay, remaining - 1)
 
         return color * comps.obj.material.reflective
+    }
+
+    fun refractedColor(comps: Computation, remaining: Int = 4): Color {
+        if (comps.obj.material.transparency.equal(0.0) || remaining <= 0) return Color.BLACK
+
+        val nRatio = comps.n1 / comps.n2
+        val cosI = comps.eyeV dot comps.normalV
+        val sin2T = (nRatio * nRatio) * (1 - (cosI * cosI))
+
+        if (sin2T > 1.0) return Color.BLACK
+
+        val cosT = sqrt(1.0 - sin2T)
+        val direction = comps.normalV * (nRatio * cosI - cosT) - comps.eyeV * nRatio
+
+        val refractedRay = Ray(comps.underPoint, direction)
+
+        return colorAt(refractedRay, remaining - 1) * comps.obj.material.transparency
     }
 
     fun isShadowed(point: Tuple): Boolean {

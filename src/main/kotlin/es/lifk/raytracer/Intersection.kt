@@ -1,9 +1,40 @@
 package es.lifk.raytracer
 
 data class Intersection(val t: Double, val obj: Shape) {
-    fun prepareComputations(ray: Ray): Computation {
+    fun prepareComputations(ray: Ray, intersections: List<Intersection> = emptyList()): Computation {
         val point = ray.position(t)
         val normal = obj.normalAt(point)
+
+        val containers = mutableListOf<Shape>()
+
+        var n1: Double = 0.0
+        var n2: Double = 0.0
+
+        for (i in intersections) {
+            if (i == this) {
+                n1 = if (containers.isEmpty()) {
+                    1.0
+                } else {
+                    containers.last().material.refractiveIndex
+                }
+            }
+
+            if (i.obj in containers) {
+                containers.remove(i.obj)
+            } else {
+                containers.add(i.obj)
+            }
+
+            if (i == this) {
+                n2 = if (containers.isEmpty()) {
+                    1.0
+                } else {
+                    containers.last().material.refractiveIndex
+                }
+
+                break
+            }
+        }
 
         return if (normal dot -ray.direction < 0) {
             Computation(
@@ -13,7 +44,9 @@ data class Intersection(val t: Double, val obj: Shape) {
                 eyeV = -ray.direction,
                 normalV = -normal,
                 reflectV = ray.direction.reflect(-normal),
-                inside = true
+                inside = true,
+                n1 = n1,
+                n2 = n2
             )
         } else {
             Computation(
@@ -22,7 +55,9 @@ data class Intersection(val t: Double, val obj: Shape) {
                 point = point,
                 eyeV = -ray.direction,
                 normalV = normal,
-                reflectV = ray.direction.reflect(normal)
+                reflectV = ray.direction.reflect(normal),
+                n1 = n1,
+                n2 = n2
             )
         }
     }
@@ -35,9 +70,12 @@ data class Computation(
     val eyeV: Tuple,
     val normalV: Tuple,
     val reflectV: Tuple,
-    val inside: Boolean = false
+    val inside: Boolean = false,
+    val n1: Double,
+    val n2: Double
 ) {
     val overPoint = point + normalV * EPSILON
+    val underPoint = point - normalV * EPSILON
 }
 
 fun intersections(vararg intersection: Intersection): Array<Intersection> {

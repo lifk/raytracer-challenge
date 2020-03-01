@@ -1,5 +1,6 @@
 package es.lifk.raytracer
 
+import es.lifk.raytracer.entities.TestPattern
 import io.kotlintest.matchers.collections.shouldContainAll
 import io.kotlintest.matchers.types.shouldBeTypeOf
 import io.kotlintest.shouldBe
@@ -183,5 +184,84 @@ class WorldSpec : StringSpec({
         val i = Intersection(sqrt(2.0), shape)
         val comps = i.prepareComputations(r)
         world.reflectedColor(comps, 0) shouldBe Color.BLACK
+    }
+
+    "the refracted color with an opaque surface" {
+        val w = defaultWorld()
+        val shape = w.objects.first()
+        val r = Ray(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0))
+        val intersections = listOf(Intersection(4.0, shape), Intersection(6.0, shape))
+        val comps = intersections.first().prepareComputations(r, intersections)
+
+        w.refractedColor(comps, 5) shouldBe Color.BLACK
+    }
+
+    "the refracted color at the maximum recursive depth" {
+        val w = defaultWorld()
+        val shape = w.objects.first()
+        shape.material.refractiveIndex = 1.5
+        shape.material.transparency = 1.0
+        val r = Ray(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0))
+        val intersections = listOf(Intersection(4.0, shape), Intersection(6.0, shape))
+        val comps = intersections.first().prepareComputations(r, intersections)
+
+        w.refractedColor(comps, 0) shouldBe Color.BLACK
+    }
+
+    "the refracted color under total internal reflection" {
+        val w = defaultWorld()
+        val shape = w.objects.first()
+        shape.material.refractiveIndex = 1.5
+        shape.material.transparency = 1.0
+        val r = Ray(point(0.0, 0.0, sqrt(2.0) / 2.0), vector(0.0, 1.0, 0.0))
+        val intersections = listOf(Intersection(-sqrt(2.0) / 2.0, shape), Intersection(sqrt(2.0) / 2.0, shape))
+        val comps = intersections[1].prepareComputations(r, intersections)
+
+        w.refractedColor(comps, 0) shouldBe Color.BLACK
+    }
+
+    "the refracted color with a reflected ray" {
+        val w = defaultWorld()
+        val a = w.objects.first()
+        a.material.ambient = 1.0
+        a.material.pattern = TestPattern()
+
+        val b = w.objects[1]
+        b.material.transparency = 1.0
+        b.material.refractiveIndex = 1.5
+
+        val r = Ray(point(0.0, 0.0, 0.1), vector(0.0, 1.0, 0.0))
+        val intersections = listOf(
+            Intersection(-0.9899, a),
+            Intersection(-0.4899, b),
+            Intersection(0.4899, b),
+            Intersection(0.9899, a)
+        )
+
+        val comps = intersections[2].prepareComputations(r, intersections)
+
+        w.refractedColor(comps, 5) shouldBe Color(0.0, 0.99888, 0.04721)
+    }
+
+    "shadeHit with a transparent material" {
+        val w = defaultWorld()
+        val floor = Plane(
+            transform = translation(0.0, -1.0, 0.0),
+            material = Material(transparency = 0.5, refractiveIndex = 1.5)
+        )
+        val ball = Sphere(translation(0.0, -3.5, -0.5), Material(color = Color(1.0, 0.0, 0.0), ambient = 0.5))
+
+        w.objects.add(floor)
+        w.objects.add(ball)
+
+        val r = Ray(point(0.0, 0.0, -3.0), vector(0.0, -sqrt(2.0) / 2.0, sqrt(2.0) / 2.0))
+
+        val intersections = listOf(
+            Intersection(sqrt(2.0), floor)
+        )
+
+        val comps = intersections[0].prepareComputations(r, intersections)
+
+        w.shadeHit(comps, 5) shouldBe Color(0.93642, 0.68642, 0.68642)
     }
 })
