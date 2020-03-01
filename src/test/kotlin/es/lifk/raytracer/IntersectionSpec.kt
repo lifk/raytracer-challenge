@@ -82,4 +82,31 @@ class IntersectionSpec : StringSpec({
         val intersection = Intersection(sqrt(2.0), shape)
         intersection.prepareComputations(ray).reflectV shouldBe vector(0.0, sqrt(2.0) / 2.0, sqrt(2.0) / 2.0)
     }
+
+    "The Schlick approximation under total internal reflection" {
+        val shape = glassSphere()
+        val r = Ray(point(0.0, 0.0, sqrt(2.0) / 2.0), vector(0.0, 1.0, 0.0))
+        val intersections = listOf(Intersection(-sqrt(2.0) / 2.0, shape), Intersection(sqrt(2.0) / 2.0, shape))
+
+        val comps = intersections[1].prepareComputations(r, intersections)
+        schlick(comps) shouldBe 1.0
+    }
+
+    "The Schlick approximation with a perpendicular viewing angle" {
+        val shape = glassSphere()
+        val r = Ray(point(0.0, 0.0, 0.0), vector(0.0, 1.0, 0.0))
+        val intersections = listOf(Intersection(-1.0, shape), Intersection(1.0, shape))
+
+        val comps = intersections[1].prepareComputations(r, intersections)
+        schlick(comps).equal(0.04) shouldBe true
+    }
+
+    "The Schlick approximation with small angle and n2 > n1" {
+        val shape = glassSphere()
+        val r = Ray(point(0.0, 0.99, -2.0), vector(0.0, 0.0, 1.0))
+        val intersections = listOf(Intersection(1.8589, shape))
+
+        val comps = intersections[0].prepareComputations(r, intersections)
+        schlick(comps).equal(0.48873) shouldBe true
+    }
 })

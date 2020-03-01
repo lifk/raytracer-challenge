@@ -264,4 +264,26 @@ class WorldSpec : StringSpec({
 
         w.shadeHit(comps, 5) shouldBe Color(0.93642, 0.68642, 0.68642)
     }
+
+    "shadeHit with a reflective, transparent material" {
+        val w = defaultWorld()
+        val floor = Plane(
+            transform = translation(0.0, -1.0, 0.0),
+            material = Material(transparency = 0.5, refractiveIndex = 1.5, reflective = 0.5)
+        )
+        val ball = Sphere(translation(0.0, -3.5, -0.5), Material(color = Color(1.0, 0.0, 0.0), ambient = 0.5))
+
+        w.objects.add(floor)
+        w.objects.add(ball)
+
+        val r = Ray(point(0.0, 0.0, -3.0), vector(0.0, -sqrt(2.0) / 2.0, sqrt(2.0) / 2.0))
+
+        val intersections = listOf(
+            Intersection(sqrt(2.0), floor)
+        )
+
+        val comps = intersections[0].prepareComputations(r, intersections)
+
+        w.shadeHit(comps, 5) shouldBe Color(0.93391, 0.69643, 0.69243)
+    }
 })

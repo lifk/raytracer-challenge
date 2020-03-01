@@ -10,7 +10,7 @@ data class World(var light: PointLight? = null) {
     }
 
     fun shadeHit(comps: Computation, remaining: Int = 4): Color {
-        return lighting(
+        val surface = lighting(
             material = comps.obj.material,
             obj = comps.obj,
             light = light!!,
@@ -18,7 +18,19 @@ data class World(var light: PointLight? = null) {
             eyeVector = comps.eyeV,
             normal = comps.normalV,
             inShadow = isShadowed(comps.overPoint)
-        ) + reflectedColor(comps, remaining) + refractedColor(comps, remaining)
+        )
+
+        val reflected = reflectedColor(comps, remaining)
+        val refracted = refractedColor(comps, remaining)
+
+        val material = comps.obj.material
+
+        return if (material.reflective > 0.0 && material.transparency > 0.0) {
+            val reflectance = schlick(comps)
+            surface + reflected * reflectance + refracted * (1 - reflectance)
+        } else {
+            surface + reflected + refracted
+        }
     }
 
     fun colorAt(ray: Ray, remaining: Int = 4): Color {

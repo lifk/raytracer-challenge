@@ -1,5 +1,8 @@
 package es.lifk.raytracer
 
+import kotlin.math.pow
+import kotlin.math.sqrt
+
 data class Intersection(val t: Double, val obj: Shape) {
     fun prepareComputations(ray: Ray, intersections: List<Intersection> = emptyList()): Computation {
         val point = ray.position(t)
@@ -61,6 +64,23 @@ data class Intersection(val t: Double, val obj: Shape) {
             )
         }
     }
+}
+
+fun schlick(comps: Computation): Double {
+    var cos = comps.eyeV dot comps.normalV
+    if (comps.n1 > comps.n2) {
+        val n = comps.n1 / comps.n2
+        val sin2t = (n * n) * (1.0 - cos * cos)
+
+        if (sin2t > 1.0) return 1.0
+
+        val cosT = sqrt(1.0 - sin2t)
+        cos = cosT
+    }
+
+    val r0 = ((comps.n1 - comps.n2) / (comps.n1 + comps.n2)).pow(2)
+
+    return r0 + (1 - r0) * (1 - cos).pow(5)
 }
 
 data class Computation(

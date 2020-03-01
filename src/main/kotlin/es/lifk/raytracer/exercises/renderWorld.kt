@@ -30,6 +30,18 @@ fun main() {
         )
     )
 
+    val middleFront = Sphere(
+        transform = translation(0.5, 1.5, -2.5),
+        material = Material(
+            Color.WHITE,
+            diffuse = 0.7,
+            specular = 0.3,
+            transparency = 1.0,
+            reflective = 1.0,
+            refractiveIndex = 1.5
+        )
+    )
+
     val leftSphere = Sphere(
         transform = translation(-1.5, 0.33, -0.75) * scaling(0.33, 0.33, 0.33),
         material = Material(
@@ -46,6 +58,7 @@ fun main() {
     world.objects.add(middleSphere)
     world.objects.add(rightSphere)
     world.objects.add(leftSphere)
+    world.objects.add(middleFront)
 
     val camera = Camera(
         200,
